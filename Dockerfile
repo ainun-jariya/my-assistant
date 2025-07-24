@@ -5,7 +5,7 @@ COPY frontend/react_app/ .
 RUN npm install && npm run build
 
 #build backend
-FROM golang:1.22 AS backend-build
+FROM golang:1.24.5 AS backend-build
 WORKDIR /app
 COPY backend/ .
 RUN go build -o server main.go
