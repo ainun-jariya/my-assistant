@@ -16,6 +16,9 @@ func main() {
 	logged := logMiddleware(mux)
 
 	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 	log.Println("Listening to http://localhost:" + port)
 	log.Fatal(http.ListenAndServe(":"+port, logged))
 }
