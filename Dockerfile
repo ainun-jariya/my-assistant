@@ -8,6 +8,7 @@ RUN npm install && npm run build
 FROM golang:1.24.5 AS backend-build
 WORKDIR /app
 COPY backend/ .
+COPY backend/env/production.env ./.env
 RUN go build -o server main.go
 
 #final image
@@ -18,5 +19,5 @@ COPY --from=backend-build /app/server .
 COPY --from=frontend-build /app/dist ./frontend
 
 #serve static FE + API
-EXPOSE 8001
+EXPOSE 8080
 CMD ["./server"]

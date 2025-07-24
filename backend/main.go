@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -14,8 +15,9 @@ func main() {
 
 	logged := logMiddleware(mux)
 
-	log.Println("Listening to http://localhost:8001")
-	log.Fatal(http.ListenAndServe(":8001", logged))
+	port := os.Getenv("PORT")
+	log.Println("Listening to http://localhost:" + port)
+	log.Fatal(http.ListenAndServe(":"+port, logged))
 }
 
 func withCORS(next http.HandlerFunc) http.HandlerFunc {
