@@ -12,5 +12,7 @@ steps:
         '--platform','managed',
         '--allow-unauthenticated'
       ]
+options:
+  logging: CLOUD_LOGGING_ONLY
 images:
   -  'asia-southeast2-docker.pkg.dev/myassistant-466911/myassistant-repo/my-assistant'
