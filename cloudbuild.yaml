@@ -1,0 +1,16 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build','-t','asia-southeast2-docker.pkg.dev/myassistant-466911/myassistant-repo/my-assistant','.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push','asia-southeast2-docker.pkg.dev/myassistant-466911/myassistant-repo/my-assistant']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      [
+        'run','deploy','my-assistant',
+        '--image','asia-southeast2-docker.pkg.dev/myassistant-466911/myassistant-repo/my-assistant',
+        '--region','asia-southeast2',
+        '--platform','managed',
+        '--allow-unauthenticated'
+      ]
+images:
+  -  'asia-southeast2-docker.pkg.dev/myassistant-466911/myassistant-repo/my-assistant'
