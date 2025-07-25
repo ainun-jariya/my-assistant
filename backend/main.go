@@ -7,11 +7,13 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
+	"strings"
 )
 
 func main() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/run", withCORS(routes.RunHandler))
+	mux.HandleFunc("/api/run", withCORS(routes.RunHandler))
 
 	logged := logMiddleware(mux)
 
@@ -19,6 +21,18 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
+
+	fs := http.FileServer(http.Dir("./frontend"))
+	mux.HandleFunc("/", withCORS(func(w http.ResponseWriter, r *http.Request) {
+		path := filepath.Join("./frontend", r.URL.Path)
+		_, err := os.Stat(path)
+		if err == nil && !strings.HasSuffix(r.URL.Path, "/") {
+			fs.ServeHTTP(w, r)
+			return
+		}
+		http.ServeFile(w, r, "./frontend/index.html")
+	}))
+
 	log.Println("Listening to http://localhost:" + port)
 	log.Fatal(http.ListenAndServe(":"+port, logged))
 }
